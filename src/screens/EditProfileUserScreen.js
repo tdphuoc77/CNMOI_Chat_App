@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   Dimensions,
   ImageBackground,
   StyleSheet,
   View,
   TextInput,
+  Platform
 } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -14,7 +15,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { FontAwesome5 } from '@expo/vector-icons'
 import BottomSheet from 'reanimated-bottom-sheet'
 import Animated from 'react-native-reanimated'
-import ImagePicker from 'react-native-image-crop-picker'
+import * as ImagePicker from 'expo-image-picker'
 
 const windowWidth = Dimensions.get('window').width
 const windowHeight = Dimensions.get('window').height
@@ -24,32 +25,67 @@ export default function EditProfileUserScreen({ navigation }) {
     'https://scontent.fsgn5-4.fna.fbcdn.net/v/t1.6435-9/188172010_1690075374524458_4921122626087969103_n.jpg?_nc_cat=102&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=NxrrsfMaURcAX_aWPDS&_nc_ht=scontent.fsgn5-4.fna&oh=f02c2023e77961898669ae2ef0c0a6fc&oe=615BDD7D'
   )
 
-  const takePhotoFromCamera = () => {
-    console.log('CHECKKKKKKKKKKk')
-    ImagePicker.openCamera({
-      compressImageMaxWidth: 300,
-      compressImageMaxHeight: 300,
-      cropping: true,
-      compressImageQuality: 0.7,
-    }).then((image) => {
-      console.log(image)
-      setImage(image.path)
-      this.bs.current.snapTo(1)
-    })
-  }
 
-  const choosePhotoFromLibrary = () => {
-    console.log('CHECKKKKKKKKKKk')
-    ImagePicker.openPicker({
-      width: 300,
-      height: 300,
-      cropping: true,
-      compressImageQuality: 0.7,
-    }).then((image) => {
-      console.log(image)
-      setImage(image.path)
-      this.bs.current.snapTo(1)
+  // const takePhotoFromCamera = () => {
+  //   console.log('CHECKKKKKKKKKKk')
+  //   ImagePicker.openCamera({
+  //     compressImageMaxWidth: 300,
+  //     compressImageMaxHeight: 300,
+  //     cropping: true,
+  //     compressImageQuality: 0.7,
+  //   }).then((image) => {
+  //     console.log(image)
+  //     setImage(image.path)
+  //     this.bs.current.snapTo(1)
+  //   })
+  // }
+
+  const takePhotoFromCamera = async () => {
+    let result = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+      base64: true,
+    });
+    if (!result.cancelled) {
+      console.log(result.uri);
+    }
+  };
+
+  useEffect(async () => {
+    if (Platform.OS !== 'web') {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+
+      }
+    }
+  }, [])
+
+  const choosePhotoFromLibrary = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1
     })
+
+    if (!result.cancelled) {
+      setImage(result.uri)
+      this.bs.current.snapTo(1)
+    }
+
+    // console.log('CHECKKKKKKKKKKk')
+    // ImagePicker.openPicker({
+    //   width: 300,
+    //   height: 300,
+    //   cropping: true,
+    //   compressImageQuality: 0.7,
+    // }).then((image) => {
+    //   console.log(image)
+    //   setImage(image.path)
+    //   this.bs.current.snapTo(1)
+    // })
   }
 
   const renderInner = () => (
