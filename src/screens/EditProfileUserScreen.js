@@ -53,14 +53,14 @@ export default function EditProfileUserScreen({ navigation }) {
     }
   };
 
-  useEffect(async () => {
-    if (Platform.OS !== 'web') {
-      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== 'granted') {
+  // useEffect(async () => {
+  //   if (Platform.OS !== 'web') {
+  //     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //     if (status !== 'granted') {
 
-      }
-    }
-  }, [])
+  //     }
+  //   }
+  // }, [])
 
   const choosePhotoFromLibrary = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
