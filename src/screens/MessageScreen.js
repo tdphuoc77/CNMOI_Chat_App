@@ -2,6 +2,7 @@ import React from 'react'
 import { AntDesign, Entypo, Feather, Ionicons } from "@expo/vector-icons";
 import {
     Dimensions,
+    KeyboardAvoidingView,
     SafeAreaView,
     StyleSheet,
     TextInput,
@@ -18,7 +19,10 @@ const windowHeight = Dimensions.get("window").height;
 
 export default function MessageScreen({ navigation }) {
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView >
+
+
+
             <View style={styles.content}>
                 <View style={styles.header}>
                     <View style={styles.contentHeader}>
@@ -46,19 +50,24 @@ export default function MessageScreen({ navigation }) {
 
 
                 </View>
+                {/* <KeyboardAvoidingView behavior="height"> */}
                 <View style={styles.footer}>
                     <Entypo name="emoji-happy" size={30} color="#3399cc" />
                     <TextInput
                         style={styles.input}
                         placeholder="Nhập tin nhắn..."
+                        placeholderTextColor='#fff'
+                    // multiline={true}
                     // autoFocus={true}
                     />
                     <MaterialCommunityIcons name="send" size={30} color="#3399cc" />
                     <Entypo name="image-inverted" size={30} color="#3399cc" />
                     {/* <Feather name="more-horizontal" size={30} color="#3399cc" /> */}
                 </View>
+                {/* </KeyboardAvoidingView> */}
+
             </View>
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 
