@@ -17,6 +17,7 @@ export default function CustomDrawerMenu(props) {
             await AsyncStorage.removeItem('AccessToken');
             await AsyncStorage.removeItem('UserID');
             console.log(await AsyncStorage.getItem('AccessToken'))
+            props.setMenu()
             props.navigation.navigate('LoginScreen')
         } catch (error) {
             console.log(error)

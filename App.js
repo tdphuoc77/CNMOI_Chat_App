@@ -24,6 +24,11 @@ const Drawer = createDrawerNavigator()
 export default function App() {
 
   const [accessToken, setAccessToken] = useState(null)
+  const [isUser, setIsUser] = useState(false)
+
+  const setMenu = () => {
+    setIsUser(!isUser)
+  }
 
   useEffect(() => {
     _retrieveData()
@@ -33,9 +38,10 @@ export default function App() {
     try {
       const value = await AsyncStorage.getItem('AccessToken');
       console.log(value)
-      console.log(await AsyncStorage.getItem('UserID'))
+      console.log(await AsyncStorage.getItem('User'))
       if (value !== null) {
         setAccessToken(value)
+        setIsUser(true)
       }
     } catch (error) {
       // Error retrieving data
@@ -53,7 +59,7 @@ export default function App() {
               headerShown: false,
             }}
 
-            drawerContent={(props) => <CustomDrawerMenu isUser={accessToken} {...props} />}
+            drawerContent={(props) => <CustomDrawerMenu setMenu={() => setMenu()} isUser={isUser} {...props} />}
           >
 
             <Drawer.Screen name="Dashboard" component={Dashboard} />
@@ -61,7 +67,7 @@ export default function App() {
             <Drawer.Screen name="MessageScreen" component={MessageScreen} />
             <Drawer.Screen name="ProfileUserScreen" component={ProfileUserScreen} />
             <Drawer.Screen name="EditProfileUserScreen" component={EditProfileUserScreen} />
-            <Drawer.Screen name="LoginScreen" component={LoginScreen} />
+            <Drawer.Screen name="LoginScreen" setMenu={() => setMenu()} component={LoginScreen} />
             <Drawer.Screen name="RegisterScreen" component={RegisterScreen} />
           </Drawer.Navigator>
         ) : (
@@ -70,10 +76,10 @@ export default function App() {
             screenOptions={{
               headerShown: false,
             }}
-            drawerContent={(props) => <CustomDrawerMenu isUser={accessToken} {...props} />}
+            drawerContent={(props) => <CustomDrawerMenu setMenu={() => setMenu()} isUser={isUser} {...props} />}
           >
             <Drawer.Screen name="StartScreen" component={StartScreen} />
-            <Drawer.Screen name="LoginScreen" component={LoginScreen} />
+            <Drawer.Screen name="LoginScreen" setMenu={() => setMenu()} component={LoginScreen} />
             <Drawer.Screen name="RegisterScreen" component={RegisterScreen} />
             <Drawer.Screen name="Dashboard" component={Dashboard} />
             <Drawer.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} />

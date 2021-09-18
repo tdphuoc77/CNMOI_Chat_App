@@ -15,7 +15,7 @@ import AsyncStorage from '@react-native-community/async-storage'
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
-export default function LoginScreen({ navigation }) {
+export default function LoginScreen({ navigation }, props) {
 
   const [sdt, setSdt] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
@@ -41,7 +41,7 @@ export default function LoginScreen({ navigation }) {
       redirect: 'follow'
     };
 
-    fetch("http://192.168.1.11:8800/api/auth/login", requestOptions)
+    fetch("http://192.168.1.5:8800/api/auth/login", requestOptions)
       .then(response => {
         if (response.ok) {
           return response.json();
@@ -49,12 +49,10 @@ export default function LoginScreen({ navigation }) {
         throw Error(response.status)
       })
       .then(async result => {
-        // console.log(result)
         alert(result.msg)
-
         try {
           await AsyncStorage.setItem('AccessToken', result.accessToken)
-          await AsyncStorage.setItem('UserID', result.user._id)
+          await AsyncStorage.setItem('UserId', result.user)
         } catch (error) {
           console.log(error)
         }
@@ -67,6 +65,7 @@ export default function LoginScreen({ navigation }) {
         console.log('error', error)
         alert('Tài khoản hoặc mật khẩu không chính xác')
       });
+    props.setMenu()
 
   }
 
