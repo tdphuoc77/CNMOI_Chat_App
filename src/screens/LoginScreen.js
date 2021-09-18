@@ -8,28 +8,66 @@ import Button from '../components/Button'
 import TextInput from '../components/TextInput'
 import BackButton from '../components/BackButton'
 import { theme } from '../core/theme'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
+import AsyncStorage from '@react-native-community/async-storage'
 
 const windowWidth = Dimensions.get("window").width;
 const windowHeight = Dimensions.get("window").height;
 export default function LoginScreen({ navigation }) {
+
   const [sdt, setSdt] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
 
   const onLoginPressed = () => {
-    // const emailError = emailValidator(sdt.value)
-    // const passwordError = passwordValidator(password.value)
+    const emailError = emailValidator(sdt.value)
+    const passwordError = passwordValidator(password.value)
     // if (emailError || passwordError) {
     //   setSdt({ ...sdt, error: emailError })
     //   setPassword({ ...password, error: passwordError })
-    //   return
+    //   return '';
     // }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
-    })
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+      "phoneNumber": sdt.value,
+      "password": password.value
+    });
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw,
+      redirect: 'follow'
+    };
+
+    fetch("http://192.168.1.11:8800/api/auth/login", requestOptions)
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw Error(response.status)
+      })
+      .then(async result => {
+        // console.log(result)
+        alert(result.msg)
+
+        try {
+          await AsyncStorage.setItem('AccessToken', result.accessToken)
+          await AsyncStorage.setItem('UserID', result.user._id)
+        } catch (error) {
+          console.log(error)
+        }
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Dashboard' }],
+        })
+      })
+      .catch(error => {
+        console.log('error', error)
+        alert('Tài khoản hoặc mật khẩu không chính xác')
+      });
+
   }
 
   return (

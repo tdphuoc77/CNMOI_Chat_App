@@ -6,16 +6,28 @@ import {
     Paragraph, Drawer, TouchableRipple, Switch
 } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import AsyncStorage from '@react-native-community/async-storage'
 
 export default function CustomDrawerMenu(props) {
-
     const [isDarkTheme, setIsDarkTheme] = React.useState(false);
-    const [isUser, setIsUser] = React.useState(true)
+    // const [isUser, setIsUser] = React.useState(props.isUser)
+
+    const logout = async () => {
+        try {
+            await AsyncStorage.removeItem('AccessToken');
+            await AsyncStorage.removeItem('UserID');
+            console.log(await AsyncStorage.getItem('AccessToken'))
+            props.navigation.navigate('LoginScreen')
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     const toggleTheme = () => {
         setIsDarkTheme(!isDarkTheme);
     }
-    if (isUser) {
+
+    if (props.isUser) {
         return (
             // Đã Đăng Nhập
             <View style={styles.container}>
@@ -119,12 +131,9 @@ export default function CustomDrawerMenu(props) {
                                 size={size} />
                         )}
                         label='Đăng Xuất'
-                        onPress={() => { props.navigation.navigate('LoginScreen') }}
+                        onPress={() => logout()}
                     />
                 </Drawer.Section>
-
-
-
             </View>
         );
 

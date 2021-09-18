@@ -3,6 +3,7 @@ import { AntDesign, Entypo, Feather, Ionicons } from "@expo/vector-icons";
 import {
     Dimensions,
     KeyboardAvoidingView,
+    Platform,
     SafeAreaView,
     StyleSheet,
     TextInput,
@@ -24,6 +25,7 @@ export default function MessageScreen({ navigation }) {
 
 
             <View style={styles.content}>
+
                 <View style={styles.header}>
                     <View style={styles.contentHeader}>
                         <Ionicons
@@ -50,8 +52,8 @@ export default function MessageScreen({ navigation }) {
 
 
                 </View>
-                {/* <KeyboardAvoidingView behavior="height"> */}
-                <View style={styles.footer}>
+                <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    style={styles.footer}>
                     <Entypo name="emoji-happy" size={30} color="#3399cc" />
                     <TextInput
                         style={styles.input}
@@ -63,8 +65,9 @@ export default function MessageScreen({ navigation }) {
                     <MaterialCommunityIcons name="send" size={30} color="#3399cc" />
                     <Entypo name="image-inverted" size={30} color="#3399cc" />
                     {/* <Feather name="more-horizontal" size={30} color="#3399cc" /> */}
-                </View>
-                {/* </KeyboardAvoidingView> */}
+
+
+                </KeyboardAvoidingView>
 
             </View>
         </SafeAreaView >
@@ -110,6 +113,7 @@ const styles = StyleSheet.create({
         height: (windowHeight * 81) / 100,
     },
     footer: {
+
         backgroundColor: "#fff",
         width: "100%",
         height: (windowHeight * 7) / 100,
