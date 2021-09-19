@@ -13,6 +13,7 @@
     "@react-navigation/drawer": "^6.1.4",
     "@react-navigation/native": "^6.0.2",
     "@react-navigation/stack": "^6.0.7",
+    "axios": "^0.21.4",
     "expo": "^40.0.0",
     "expo-ads-admob": "~8.4.0",
     "expo-constants": "^11.0.2",
@@ -32,7 +33,11 @@
     "react-native-status-bar-height": "^2.6.0",
     "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.13.12",
-    "reanimated-bottom-sheet": "^1.0.0-alpha.22"
+    "react-redux": "^7.2.5",
+    "reanimated-bottom-sheet": "^1.0.0-alpha.22",
+    "redux": "^4.1.1",
+    "redux-devtools-extension": "^2.13.9",
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "~7.9.0",

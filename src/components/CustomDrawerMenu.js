@@ -3,32 +3,31 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import {
     Avatar, Text, Title, Caption,
-    Paragraph, Drawer, TouchableRipple, Switch
+    Drawer, TouchableRipple, Switch
 } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import AsyncStorage from '@react-native-community/async-storage'
+import { useDispatch, useSelector } from 'react-redux'
+import { hideMenu } from '../redux/actions/showMenuAction';
+
 
 export default function CustomDrawerMenu(props) {
     const [isDarkTheme, setIsDarkTheme] = React.useState(false);
-    // const [isUser, setIsUser] = React.useState(props.isUser)
+    const { showMenu } = useSelector(state => state)
+    const dispatch = useDispatch()
+
 
     const logout = async () => {
-        try {
-            await AsyncStorage.removeItem('AccessToken');
-            await AsyncStorage.removeItem('UserID');
-            console.log(await AsyncStorage.getItem('AccessToken'))
-            props.setMenu()
-            props.navigation.navigate('LoginScreen')
-        } catch (error) {
-            console.log(error)
-        }
+        dispatch(logout());
+        dispatch(hideMenu())
+        props.navigation.navigate('LoginScreen')
     }
 
     const toggleTheme = () => {
         setIsDarkTheme(!isDarkTheme);
     }
 
-    if (props.isUser) {
+    if (showMenu) {
         return (
             // Đã Đăng Nhập
             <View style={styles.container}>
